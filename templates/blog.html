@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>SQLi Lab - Blog</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				max-width: 800px;
+				margin: 0 auto;
+				padding: 20px;
+				background-color: #f5f5f5;
+				line-height: 1.6;
+			}
+			.container {
+				background-color: white;
+				padding: 30px;
+				border-radius: 10px;
+				box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+			}
+			.header {
+				text-align: center;
+				margin-bottom: 30px;
+				padding-bottom: 20px;
+				border-bottom: 2px solid #007bff;
+			}
+			.header h1 {
+				color: #333;
+				margin: 0;
+				font-size: 2.5em;
+			}
+			.header p {
+				color: #666;
+				margin: 10px 0 0 0;
+				font-style: italic;
+			}
+			.search-form {
+				margin-bottom: 30px;
+				display: flex;
+				gap: 10px;
+				justify-content: center;
+			}
+			.search-input {
+				padding: 12px;
+				font-size: 16px;
+				border: 2px solid #ddd;
+				border-radius: 5px;
+				flex: 1;
+				max-width: 400px;
+			}
+			.search-input:focus {
+				border-color: #007bff;
+				outline: none;
+			}
+			.search-btn {
+				padding: 12px 24px;
+				background-color: #007bff;
+				color: white;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				font-size: 16px;
+				transition: background-color 0.3s;
+			}
+			.search-btn:hover {
+				background-color: #0056b3;
+			}
+			.error {
+				background-color: #f8d7da;
+				color: #721c24;
+				padding: 12px;
+				border-radius: 5px;
+				margin-bottom: 20px;
+				border: 1px solid #f5c6cb;
+			}
+			.blog-list {
+				margin-top: 20px;
+			}
+			.blog-item {
+				background-color: #f8f9fa;
+				padding: 20px;
+				margin-bottom: 20px;
+				border-radius: 8px;
+				border-left: 4px solid #007bff;
+				transition: transform 0.2s, box-shadow 0.2s;
+			}
+			.blog-item:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+			}
+			.blog-title {
+				font-size: 1.3em;
+				font-weight: bold;
+				color: #333;
+				margin-bottom: 8px;
+			}
+			.blog-author {
+				color: #666;
+				font-style: italic;
+				font-size: 0.9em;
+			}
+			.no-results {
+				text-align: center;
+				color: #666;
+				font-style: italic;
+				margin-top: 40px;
+				padding: 40px;
+				background-color: #f8f9fa;
+				border-radius: 8px;
+			}
+			.back-link {
+				display: inline-block;
+				margin-top: 20px;
+				padding: 10px 20px;
+				background-color: #6c757d;
+				color: white;
+				text-decoration: none;
+				border-radius: 5px;
+				transition: background-color 0.3s;
+			}
+			.back-link:hover {
+				background-color: #545b62;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header">
+				<h1>📝 Blog</h1>
+				<p>Tìm kiếm và khám phá các bài viết thú vị</p>
+			</div>
+
+			<!-- Form tìm kiếm -->
+			<form class="search-form" method="GET">
+				<input
+					type="text"
+					name="search"
+					class="search-input"
+					placeholder="Tìm kiếm theo tiêu đề hoặc tác giả..."
+					value="{{ search or '' }}"
+				/>
+				<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
+			</form>
+
+			<!-- Hiển thị lỗi nếu có -->
+			{% if error %}
+			<div class="error">⚠️ {{ error }}</div>
+			{% endif %}
+
+			<!-- Danh sách blog -->
+			<div class="blog-list">
+				{% if blogs %}
+				<h3 style="color: #333; margin-bottom: 20px">
+					{% if search %} Kết quả tìm kiếm cho "{{ search }}" ({{
+					blogs|length }} bài viết): {% else %} Tất cả bài viết: {%
+					endif %}
+				</h3>
+
+				{% for blog in blogs %}
+				<div class="blog-item">
+					<div class="blog-title">{{ blog.title or blog[0] }}</div>
+					<div class="blog-author">
+						👤 Tác giả: {{ blog.author_name or blog[1] }}
+					</div>
+				</div>
+				{% endfor %} {% else %}
+				<div class="no-results">
+					{% if search %} 🔍 Không tìm thấy bài viết nào với từ khóa
+					"{{ search }}"
+					<br /><br />
+					<small
+						>Hãy thử tìm kiếm với từ khóa khác hoặc kiểm tra lại
+						chính tả</small
+					>
+					{% else %} 📝 Chưa có bài viết nào được tìm thấy
+					<br /><br />
+					<small>Hãy thử tìm kiếm để khám phá các bài viết</small>
+					{% endif %}
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</body>
+</html>

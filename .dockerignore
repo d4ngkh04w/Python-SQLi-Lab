@@ -1,0 +1,14 @@
+.git
+.gitignore
+__pycache__/
+.venv/
+env/
+venv/
+.vscode/
+.idea/
+.DS_Store
+Dockerfile*
+docker-compose*
+.dockerignore
+*.md
+LICENSE

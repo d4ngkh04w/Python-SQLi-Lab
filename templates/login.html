@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>SQLi Lab - Basic Login Challenge</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				min-height: 100vh;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			.container {
+				background-color: white;
+				padding: 40px;
+				border-radius: 15px;
+				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+				width: 100%;
+				max-width: 400px;
+				margin: 20px;
+			}
+			.header {
+				text-align: center;
+				margin-bottom: 30px;
+			}
+			.header h1 {
+				color: #333;
+				margin-bottom: 10px;
+				font-size: 28px;
+			}
+			.challenge-info {
+				background-color: #f8f9fa;
+				border-left: 4px solid #007bff;
+				padding: 15px;
+				margin-bottom: 30px;
+				border-radius: 5px;
+			}
+			.challenge-info h3 {
+				margin: 0 0 10px 0;
+				color: #007bff;
+				font-size: 16px;
+			}
+			.challenge-info p {
+				margin: 0;
+				color: #666;
+				font-size: 14px;
+				line-height: 1.4;
+			}
+			.form-group {
+				margin-bottom: 20px;
+			}
+			label {
+				display: block;
+				margin-bottom: 8px;
+				color: #333;
+				font-weight: bold;
+			}
+			input[type="text"],
+			input[type="password"] {
+				width: 100%;
+				padding: 12px;
+				border: 2px solid #ddd;
+				border-radius: 5px;
+				font-size: 16px;
+				transition: border-color 0.3s ease;
+				box-sizing: border-box;
+			}
+			input[type="text"]:focus,
+			input[type="password"]:focus {
+				outline: none;
+				border-color: #007bff;
+			}
+			.btn {
+				width: 100%;
+				padding: 12px;
+				background-color: #007bff;
+				color: white;
+				border: none;
+				border-radius: 5px;
+				font-size: 16px;
+				font-weight: bold;
+				cursor: pointer;
+				transition: background-color 0.3s ease;
+			}
+			.btn:hover {
+				background-color: #0056b3;
+			}
+			.back-link {
+				text-align: center;
+				margin-top: 20px;
+			}
+			.back-link a {
+				color: #007bff;
+				text-decoration: none;
+				font-size: 14px;
+			}
+			.back-link a:hover {
+				text-decoration: underline;
+			}
+			.error-message {
+				background-color: #f8d7da;
+				color: #721c24;
+				padding: 10px;
+				border-radius: 5px;
+				margin-bottom: 20px;
+				text-align: center;
+			}
+			.success-message {
+				background-color: #d4edda;
+				color: #155724;
+				padding: 10px;
+				border-radius: 5px;
+				margin-bottom: 20px;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header">
+				<h1>Basic SQLi Challenge</h1>
+			</div>
+
+			<div class="challenge-info">
+				<h3>🎯 Objective</h3>
+				<p>
+					Use SQL Injection to bypass the login system and gain access
+					to the admin account.
+				</p>
+			</div>
+
+			{% if error %}
+			<div class="error-message">{{ error }}</div>
+			{% endif %} {% if success %}
+			<div class="success-message">{{ success }}</div>
+			{% endif %}
+
+			<form method="POST" action="/sqli/basic">
+				<div class="form-group">
+					<label for="username">👤 Username:</label>
+					<input
+						type="text"
+						id="username"
+						name="username"
+						required
+						placeholder="Enter username..."
+						value="{{ request.form.username if request.form.username }}"
+					/>
+				</div>
+
+				<div class="form-group">
+					<label for="password">🔐 Password:</label>
+					<input
+						type="password"
+						id="password"
+						name="password"
+						required
+						placeholder="Enter password..."
+					/>
+				</div>
+
+				<button type="submit" class="btn">Login</button>
+			</form>
+
+			<div class="back-link">
+				<a href="/">← Back to Homepage</a>
+			</div>
+		</div>
+	</body>
+</html>
