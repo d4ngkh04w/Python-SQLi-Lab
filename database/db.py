@@ -77,64 +77,108 @@ def init_data(
         | mysql.connector.abstracts.MySQLConnectionAbstract
     ),
 ):
-    admin_password = os.urandom(12).hex()
-    user_password = "secret"
 
     cursor = conn.cursor()
-    cursor.execute(
-        """
-        INSERT INTO users (username, password, role, secret) VALUES
-            (%s, %s, 'admin', %s),
-            (%s, %s, 'user', NULL)
-        """,
-        ("admin", admin_password, FLAG_1, "user", user_password),
-    )
 
-    cursor.execute(
-        """
-        INSERT INTO blogs (title, author_name) VALUES
-            ('Lập trình Python cơ bản', 'Nguyễn Văn A'),
-            ('Tìm hiểu về Docker', 'Trần Thị B'),
-            ('Hướng dẫn sử dụng Git hiệu quả', 'Lê Văn C'),
-            ('5 thư viện Python cho khoa học dữ liệu', 'Phạm Thị D'),
-            ('Làm quen với ReactJS', 'Ngô Minh E'),
-            ('Cách tối ưu hóa hiệu suất JavaScript', 'Đỗ Thị F'),
-            ('Machine Learning cho người mới bắt đầu', 'Vũ Văn G'),
-            ('REST API với Flask và Python', 'Hoàng Thị H'),
-            ('CSS Grid vs Flexbox: Khi nào dùng gì?', 'Phan Văn I'),
-            ('Bảo mật web: Những điều cơ bản cần biết', 'Trịnh Thị J'),
-            ('Node.js và MongoDB: Xây dựng ứng dụng fullstack', 'Lý Văn K'),
-            ('TypeScript: Tại sao bạn nên học?', 'Bùi Thị L'),
-            ('DevOps cơ bản: CI/CD với GitHub Actions', 'Đặng Văn M'),
-            ('Vue.js 3: Những tính năng mới đáng chú ý', 'Nguyễn Thị N'),
-            ('SQL Injection và cách phòng chống', 'Tô Văn O'),
-            ('Redis: Cache và Session Store hiệu quả', 'Đinh Thị P'),
-            ('Design Patterns trong lập trình OOP', 'Mai Văn Q'),
-            ('Microservices vs Monolith: Chọn kiến trúc nào?', 'Lại Thị R'),
-            ('Kubernetes cơ bản cho Developer', 'Chu Văn S'),
-            ('Clean Code: Viết code sạch và dễ maintain', 'Dương Thị T'),
-            ('AWS Lambda: Serverless Computing thực tế', 'Phùng Văn U'),
-            ('GraphQL vs REST: So sánh chi tiết', 'Ông Thị V'),
-            ('Unit Testing với Jest và Python unittest', 'Hồ Văn W'),
-            ('Blockchain và Smart Contract cơ bản', 'Võ Thị X'),
-            ('Performance Testing với JMeter', 'Lưu Văn Y'),
-            ('Mobile App Development với React Native', 'Cao Thị Z'),
-            ('Data Science với Pandas và NumPy', 'Hà Văn AA'),
-            ('Elasticsearch: Tìm kiếm và phân tích dữ liệu', 'Kiều Thị BB'),
-            ('OAuth 2.0 và JWT trong Authentication', 'Lương Văn CC'),
-            ('Agile và Scrum: Methodology cho team hiệu quả', 'Mạc Thị DD'),
-            ('Progressive Web Apps (PWA): Tương lai của web', 'Ninh Văn EE'),
-            ('Apache Kafka: Message Queue cho hệ thống lớn', 'Ô Thị FF'),
-            ('Code Review: Best Practices và Tools', 'Quách Văn GG'),
-            ('Cyber Security: Bảo vệ ứng dụng web', 'Sầm Thị HH'),
-            ('Flutter vs React Native: Chọn framework nào?', 'Tạ Văn II'),
-            ('Big Data với Apache Spark', 'Uyên Thị JJ'),
-            ('Monitoring và Logging trong Production', 'Vương Văn KK'),
-            ('API Design: RESTful best practices', 'Xa Thị LL'),
-            ('Git Advanced: Rebase, Cherry-pick và Hooks', 'Yêu Văn MM'),
-            ('Load Balancing và High Availability', 'Zung Thị NN');
-        """
-    )
+    users_data = [
+        ("admin", f"{os.urandom(12).hex()}", "admin", FLAG_1),
+        ("alice", f"{os.urandom(12).hex()}", "user", None),
+        ("bob", f"{os.urandom(12).hex()}", "user", None),
+        ("charlie", f"{os.urandom(12).hex()}", "user", None),
+        ("diana", f"{os.urandom(12).hex()}", "user", None),
+        ("edward", f"{os.urandom(12).hex()}", "user", None),
+        ("fiona", f"{os.urandom(12).hex()}", "user", None),
+        ("george", f"{os.urandom(12).hex()}", "user", None),
+        ("helen", f"{os.urandom(12).hex()}", "user", None),
+        ("ivan", f"{os.urandom(12).hex()}", "user", None),
+        ("julia", f"{os.urandom(12).hex()}", "user", None),
+        ("kevin", f"{os.urandom(12).hex()}", "user", None),
+        ("linda", f"{os.urandom(12).hex()}", "user", None),
+        ("martin", f"{os.urandom(12).hex()}", "user", None),
+        ("nancy", f"{os.urandom(12).hex()}", "user", None),
+        ("oscar", f"{os.urandom(12).hex()}", "user", None),
+        ("penny", f"{os.urandom(12).hex()}", "user", None),
+        ("quincy", f"{os.urandom(12).hex()}", "user", None),
+        ("rachel", f"{os.urandom(12).hex()}", "user", None),
+        ("steve", f"{os.urandom(12).hex()}", "user", None),
+        ("tina", f"{os.urandom(12).hex()}", "user", None),
+        ("victor", f"{os.urandom(12).hex()}", "user", None),
+        ("wendy", f"{os.urandom(12).hex()}", "user", None),
+        ("xavier", f"{os.urandom(12).hex()}", "user", None),
+        ("yvonne", f"{os.urandom(12).hex()}", "user", None),
+        ("zack", f"{os.urandom(12).hex()}", "user", None),
+    ]
+
+    for username, password, role, secret in users_data:
+        cursor.execute(
+            """
+            INSERT INTO users (username, password, role, secret) VALUES
+                (%s, %s, %s, %s);
+            """,
+            (username, password, role, secret),
+        )
+
+    # Insert blogs with author_name matching usernames
+    blogs_data = [
+        ("Lập trình Python cơ bản", "alice"),
+        ("Tìm hiểu về Docker", "bob"),
+        ("Hướng dẫn sử dụng Git hiệu quả", "charlie"),
+        ("5 thư viện Python cho khoa học dữ liệu", "diana"),
+        ("Làm quen với ReactJS", "edward"),
+        ("Cách tối ưu hóa hiệu suất JavaScript", "fiona"),
+        ("Machine Learning cho người mới bắt đầu", "george"),
+        ("REST API với Flask và Python", "helen"),
+        ("CSS Grid vs Flexbox: Khi nào dùng gì?", "ivan"),
+        ("Bảo mật web: Những điều cơ bản cần biết", "julia"),
+        ("Node.js và MongoDB: Xây dựng ứng dụng fullstack", "kevin"),
+        ("TypeScript: Tại sao bạn nên học?", "linda"),
+        ("DevOps cơ bản: CI/CD với GitHub Actions", "martin"),
+        ("Vue.js 3: Những tính năng mới đáng chú ý", "nancy"),
+        ("SQL Injection và cách phòng chống", "oscar"),
+        ("Redis: Cache và Session Store hiệu quả", "penny"),
+        ("Design Patterns trong lập trình OOP", "quincy"),
+        ("Microservices vs Monolith: Chọn kiến trúc nào?", "rachel"),
+        ("Kubernetes cơ bản cho Developer", "steve"),
+        ("Clean Code: Viết code sạch và dễ maintain", "tina"),
+        ("AWS Lambda: Serverless Computing thực tế", "victor"),
+        ("GraphQL vs REST: So sánh chi tiết", "wendy"),
+        ("Unit Testing với Jest và Python unittest", "xavier"),
+        ("Blockchain và Smart Contract cơ bản", "yvonne"),
+        ("Performance Testing với JMeter", "zack"),
+        ("Mobile App Development với React Native", "alice"),
+        ("Data Science với Pandas và NumPy", "bob"),
+        ("Elasticsearch: Tìm kiếm và phân tích dữ liệu", "charlie"),
+        ("OAuth 2.0 và JWT trong Authentication", "diana"),
+        ("Agile và Scrum: Methodology cho team hiệu quả", "edward"),
+        ("Progressive Web Apps (PWA): Tương lai của web", "fiona"),
+        ("Apache Kafka: Message Queue cho hệ thống lớn", "george"),
+        ("Code Review: Best Practices và Tools", "helen"),
+        ("Cyber Security: Bảo vệ ứng dụng web", "ivan"),
+        ("Flutter vs React Native: Chọn framework nào?", "julia"),
+        ("Big Data với Apache Spark", "kevin"),
+        ("Monitoring và Logging trong Production", "linda"),
+        ("API Design: RESTful best practices", "martin"),
+        ("Git Advanced: Rebase, Cherry-pick và Hooks", "nancy"),
+        ("Load Balancing và High Availability", "oscar"),
+        ("Containerization với Docker và Kubernetes", "penny"),
+        ("Microservices Architecture Best Practices", "quincy"),
+        ("Web Security và Penetration Testing", "rachel"),
+        ("Cloud Computing với AWS và Azure", "steve"),
+        ("Database Optimization và Performance Tuning", "tina"),
+        ("Frontend Frameworks: React vs Vue vs Angular", "victor"),
+        ("Backend Development với Node.js và Express", "wendy"),
+        ("Data Analysis với Python và R", "xavier"),
+        ("Mobile Development: Native vs Cross-platform", "yvonne"),
+        ("DevSecOps: Security trong CI/CD Pipeline", "zack"),
+    ]
+
+    for title, author_name in blogs_data:
+        cursor.execute(
+            """
+            INSERT INTO blogs (title, author_name) VALUES (%s, %s);
+            """,
+            (title, author_name),
+        )
 
     cursor.execute(
         """

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>SQLi Lab - Boolean-based</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				min-height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 20px;
+			}
+
+			.container {
+				background: rgba(255, 255, 255, 0.95);
+				border-radius: 20px;
+				padding: 40px;
+				box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+				backdrop-filter: blur(10px);
+				max-width: 500px;
+				width: 100%;
+				text-align: center;
+			}
+
+			.header h1 {
+				color: #333;
+				margin-bottom: 30px;
+				font-size: 2.2em;
+				font-weight: 600;
+				text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			}
+
+			.search-form {
+				margin-bottom: 30px;
+			}
+
+			.search-input {
+				width: 100%;
+				padding: 15px 20px;
+				border: 2px solid #e0e0e0;
+				border-radius: 50px;
+				font-size: 16px;
+				outline: none;
+				transition: all 0.3s ease;
+				margin-bottom: 20px;
+				background: #f8f9fa;
+			}
+
+			.search-input:focus {
+				border-color: #667eea;
+				box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
+				background: white;
+			}
+
+			.search-btn {
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				color: white;
+				border: none;
+				padding: 15px 30px;
+				border-radius: 50px;
+				font-size: 16px;
+				font-weight: 600;
+				cursor: pointer;
+				transition: all 0.3s ease;
+				box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+			}
+
+			.search-btn:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+			}
+
+			.search-btn:active {
+				transform: translateY(0);
+			}
+
+			.result {
+				background: #f8f9fa;
+				border-radius: 15px;
+				padding: 25px;
+				margin-top: 20px;
+				border-left: 5px solid #667eea;
+			}
+
+			.result h3 {
+				color: #333;
+				font-size: 1.3em;
+				margin-bottom: 10px;
+			}
+
+			.result p {
+				color: #666;
+				font-size: 1.1em;
+				line-height: 1.5;
+			}
+
+			/* Animation for result appearance */
+			.result {
+				animation: slideIn 0.5s ease-out;
+			}
+
+			@keyframes slideIn {
+				from {
+					opacity: 0;
+					transform: translateY(20px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			/* Responsive design */
+			@media (max-width: 600px) {
+				.container {
+					padding: 30px 20px;
+					margin: 10px;
+				}
+
+				.header h1 {
+					font-size: 1.8em;
+				}
+
+				.search-input {
+					font-size: 14px;
+					padding: 12px 18px;
+				}
+
+				.search-btn {
+					font-size: 14px;
+					padding: 12px 25px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header">
+				<h1>👤 Tìm kiếm người dùng</h1>
+			</div>
+
+			<form class="search-form" method="GET">
+				<input
+					type="text"
+					name="search"
+					class="search-input"
+					placeholder="Tìm kiếm tên người dùng..."
+					value="{{ search or '' }}"
+				/>
+				<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
+			</form>
+
+            {% if result and show_result %}
+                <div class="result">
+                    {% if result == "Found" %}
+                        <h3>✅ Tìm thấy người dùng trong database!</h3>
+                    {% else %}
+                        <h3>❌ Không tìm thấy người dùng nào!</h3>
+                    {% endif %}
+                </div>
+            {% elif search and not show_result %}
+                <div class="result">
+                    <h3>Không thể hiển thị kết quả</h3>
+                </div>
+            {% endif %}
+	</body>
+</html>
