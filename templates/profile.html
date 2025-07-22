@@ -23,6 +23,24 @@
 				color: #333;
 				margin-bottom: 30px;
 			}
+			.back-link {
+				text-align: center;
+				margin-top: 30px;
+			}
+			.back-link a {
+				color: #007bff;
+				text-decoration: none;
+				font-size: 16px;
+				padding: 10px 20px;
+				border: 2px solid #007bff;
+				border-radius: 5px;
+				transition: all 0.3s ease;
+				display: inline-block;
+			}
+			.back-link a:hover {
+				background-color: #007bff;
+				color: white;
+			}
 		</style>
 	</head>
 	<body>
@@ -34,6 +52,13 @@
 			{{ secret }} {% else %}
 			<strong>You don't have a secret.</strong>
 			{% endif %}
+
+			<div class="back-link">
+				<a href="/sqli/basic">← Back to Login</a>
+			</div>
+			<div class="back-link">
+				<a href="/">← Back to Homepage</a>
+			</div>
 		</div>
 	</body>
 </html>

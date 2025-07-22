@@ -12,7 +12,7 @@
 			}
 
 			body {
-				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+				font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 				min-height: 100vh;
 				display: flex;
@@ -141,37 +141,63 @@
 					padding: 12px 25px;
 				}
 			}
+
+			.back-link {
+				margin-top: 30px;
+				text-align: center;
+			}
+
+			.back-link a {
+				display: inline-block;
+				padding: 12px 24px;
+				background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+				color: white;
+				text-decoration: none;
+				border-radius: 50px;
+				font-weight: 600;
+				transition: all 0.3s ease;
+				box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+			}
+
+			.back-link a:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+			}
 		</style>
 	</head>
 	<body>
 		<div class="container">
 			<div class="header">
-				<h1>👤 Tìm kiếm người dùng</h1>
+				<h1>👤 User Search</h1>
 			</div>
-
 			<form class="search-form" method="GET">
 				<input
 					type="text"
 					name="search"
 					class="search-input"
-					placeholder="Tìm kiếm tên người dùng..."
+					placeholder="Search username..."
 					value="{{ search or '' }}"
 				/>
-				<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
+				<button type="submit" class="search-btn">🔍 Search</button>
 			</form>
 
-            {% if result and show_result %}
-                <div class="result">
-                    {% if result == "Found" %}
-                        <h3>✅ Tìm thấy người dùng trong database!</h3>
-                    {% else %}
-                        <h3>❌ Không tìm thấy người dùng nào!</h3>
-                    {% endif %}
-                </div>
-            {% elif search and not show_result %}
-                <div class="result">
-                    <h3>Không thể hiển thị kết quả</h3>
-                </div>
-            {% endif %}
+			{% if result and show_result %}
+			<div class="result">
+				{% if result == "Found" %}
+				<h3>✅ User found in database!</h3>
+				{% else %}
+				<h3>❌ No user found!</h3>
+				{% endif %}
+			</div>
+			{% elif search and not show_result %}
+			<div class="result">
+				<h3>Cannot display results</h3>
+			</div>
+			{% endif %}
+
+			<div class="back-link">
+				<a href="/">← Back to Homepage</a>
+			</div>
+		</div>
 	</body>
 </html>

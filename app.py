@@ -11,6 +11,8 @@ app = flask.Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", os.urandom(24).hex())
 app.permanent_session_lifetime = timedelta(minutes=5)
 
+FLAG_1 = f"FLAG{{{os.urandom(12).hex()}}}"
+
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -47,9 +49,13 @@ def sqli_basic():
                 else:
                     user = None
 
+                print(f"User: {user}")
                 if user:
                     flask.session["username"] = user.get("username")
-                    flask.session["secret"] = user.get("secret")
+                    if user.get("role") == "admin":
+                        flask.session["secret"] = FLAG_1
+                    else:
+                        flask.session["secret"] = None
                     return flask.redirect("/sqli/basic/profile")
                 else:
                     error = "Invalid credentials"
@@ -58,8 +64,7 @@ def sqli_basic():
             finally:
                 cursor.close()
                 conn.close()
-    else:
-        flask.session.clear()
+
     return flask.render_template("login.html", error=error)
 
 

@@ -128,19 +128,18 @@
 		<div class="container">
 			<div class="header">
 				<h1>📝 Blog</h1>
-				<p>Tìm kiếm và khám phá các bài viết thú vị</p>
+				<p>Search and discover interesting articles</p>
 			</div>
-
 			<!-- Form tìm kiếm -->
 			<form class="search-form" method="GET">
 				<input
 					type="text"
 					name="search"
 					class="search-input"
-					placeholder="Tìm kiếm theo tiêu đề hoặc tác giả..."
+					placeholder="Search by title..."
 					value="{{ search or '' }}"
 				/>
-				<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
+				<button type="submit" class="search-btn">🔍 Search</button>
 			</form>
 
 			<!-- Hiển thị lỗi nếu có -->
@@ -152,33 +151,38 @@
 			<div class="blog-list">
 				{% if blogs %}
 				<h3 style="color: #333; margin-bottom: 20px">
-					{% if search %} Kết quả tìm kiếm cho "{{ search }}" ({{
-					blogs|length }} bài viết): {% else %} Tất cả bài viết: {%
-					endif %}
+					{% if search %} Search results for "{{ search }}" ({{
+					blogs|length }} articles): {% else %} All articles: {% endif
+					%}
 				</h3>
 
 				{% for blog in blogs %}
 				<div class="blog-item">
 					<div class="blog-title">{{ blog.title or blog[0] }}</div>
 					<div class="blog-author">
-						👤 Tác giả: {{ blog.author_name or blog[1] }}
+						👤 Author: {{ blog.author_name or blog[1] }}
 					</div>
 				</div>
 				{% endfor %} {% else %}
 				<div class="no-results">
-					{% if search %} 🔍 Không tìm thấy bài viết nào với từ khóa
-					"{{ search }}"
+					{% if search %} 🔍 No articles found with keyword "{{ search
+					}}"
 					<br /><br />
 					<small
-						>Hãy thử tìm kiếm với từ khóa khác hoặc kiểm tra lại
-						chính tả</small
+						>Try searching with different keywords or check the
+						spelling</small
 					>
-					{% else %} 📝 Chưa có bài viết nào được tìm thấy
+					{% else %} 📝 No articles found yet
 					<br /><br />
-					<small>Hãy thử tìm kiếm để khám phá các bài viết</small>
+					<small>Try searching to discover articles</small>
 					{% endif %}
 				</div>
 				{% endif %}
+			</div>
+
+			<!-- Navigation Links -->
+			<div style="text-align: center; margin-top: 30px">
+				<a href="/" class="back-link">← Back to Homepage</a>
 			</div>
 		</div>
 	</body>
