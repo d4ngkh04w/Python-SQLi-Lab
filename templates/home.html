@@ -4,55 +4,14 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>SQLi Lab - Home</title>
-		<style>
-			body {
-				font-family: Arial, sans-serif;
-				max-width: 800px;
-				margin: 0 auto;
-				padding: 20px;
-				background-color: #f5f5f5;
-			}
-			.container {
-				background-color: white;
-				padding: 30px;
-				border-radius: 10px;
-				box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-			}
-			h1 {
-				color: #333;
-				text-align: center;
-				margin-bottom: 30px;
-			}
-			.challenges {
-				display: flex;
-				flex-direction: column;
-				gap: 20px;
-			}
-			.challenge-card {
-				border: 2px solid #ddd;
-				border-radius: 8px;
-				padding: 20px;
-				transition: all 0.3s ease;
-				text-decoration: none;
-				color: inherit;
-				display: block;
-			}
-			.challenge-card:hover {
-				border-color: #007bff;
-				box-shadow: 0 4px 15px rgba(0, 123, 255, 0.1);
-				transform: translateY(-2px);
-			}
-			.challenge-title {
-				font-size: 20px;
-				font-weight: bold;
-				color: #333;
-				margin-bottom: 10px;
-			}
-			.challenge-description {
-				color: #666;
-				font-size: 14px;
-			}
-		</style>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static', filename='base.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static', filename='home.css') }}"
+		/>
 	</head>
 	<body>
 		<div class="container">
@@ -95,6 +54,14 @@
 					<div class="challenge-description">
 						Challenge using Time-based SQL Injection. Use time
 						delays to extract data.
+					</div>
+				</a>
+				<a href="/sqli/rce" class="challenge-card">
+					<div class="challenge-title">SQLi to RCE</div>
+					<div class="challenge-description">
+						Advanced challenge where SQL Injection leads to Remote
+						Code Execution. Exploit the vulnerability to execute
+						arbitrary commands.
 					</div>
 				</a>
 			</div>

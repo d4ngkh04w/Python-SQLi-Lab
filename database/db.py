@@ -1,25 +1,18 @@
 import os, time
 import mysql.connector, mysql.connector.abstracts
-import dotenv
-
-dotenv.load_dotenv()
 
 FLAG_2 = f"FLAG{{{os.urandom(12).hex()}}}"
-
-HOST = os.getenv("DB_HOST", "127.0.0.1")
-PASSWORD = os.getenv("DB_ROOT_PASSWORD")
-PORT = int(os.getenv("DB_PORT", 3306))
 
 
 def get_db_connection():
     for _ in range(10):
         try:
             conn = mysql.connector.connect(
-                host=HOST,
-                port=PORT,
+                host="127.0.0.1",
+                port=3306,
                 database="sqli_lab",
                 user="root",
-                password=PASSWORD,
+                password="root",
             )
             return conn
         except mysql.connector.Error as e:
