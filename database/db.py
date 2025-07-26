@@ -1,23 +1,52 @@
+"""
+Database Module for Python SQLi Lab
+
+This module handles database connections and initialization for the educational
+SQL injection demonstration application.
+
+Educational Purpose: Shows database setup with intentionally insecure configurations
+for learning about SQL injection vulnerabilities.
+"""
+
 import os, time
 import mysql.connector, mysql.connector.abstracts
+import logging
 
+logger = logging.getLogger(__name__)
+
+# Educational flag for advanced exploitation scenarios
 FLAG_2 = f"FLAG{{{os.urandom(12).hex()}}}"
 
 
 def get_db_connection():
-    for _ in range(10):
+    """
+    Establish connection to MySQL database with retry logic.
+    
+    Educational note: Using hardcoded credentials for simplicity in lab environment.
+    In production, use environment variables and secure credential management.
+    
+    Returns:
+        mysql.connector connection object
+    
+    Raises:
+        mysql.connector.Error: If connection fails after retries
+    """
+    for attempt in range(10):
         try:
             conn = mysql.connector.connect(
                 host="127.0.0.1",
                 port=3306,
                 database="sqli_lab",
                 user="root",
-                password="root",
+                password="root",  # Hardcoded for educational purposes
             )
+            logger.info("Database connection established successfully")
             return conn
         except mysql.connector.Error as e:
-            print(f"Connection failed: {str(e)}. Retrying...")
+            logger.warning(f"Connection attempt {attempt + 1} failed: {str(e)}. Retrying...")
             time.sleep(1.5)
+    
+    logger.error("Failed to connect to database after 10 attempts")
     raise mysql.connector.Error("Failed to connect to the database")
 
 
@@ -27,10 +56,29 @@ def create_tables(
         | mysql.connector.abstracts.MySQLConnectionAbstract
     ),
 ):
+    """
+    Create database tables for the SQLi lab.
+    
+    Creates three tables:
+    1. users - For authentication bypass demonstrations
+    2. blogs - For UNION and error-based SQLi demonstrations  
+    3. flag - For advanced exploitation scenarios
+    
+    Educational note: The table structure is designed to facilitate
+    various SQL injection attack demonstrations.
+    
+    Args:
+        conn: MySQL database connection
+    """
     cursor = conn.cursor()
+    logger.info("Dropping existing tables and creating fresh schema...")
+    
+    # Drop existing tables for clean setup
     cursor.execute("DROP TABLE IF EXISTS users")
     cursor.execute("DROP TABLE IF EXISTS blogs")
     cursor.execute("DROP TABLE IF EXISTS flag")
+    
+    # Users table - for authentication bypass scenarios
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS users (
@@ -42,7 +90,9 @@ def create_tables(
         );
         """
     )
+    logger.info("Created users table")
 
+    # Blogs table - for UNION and search-based SQLi scenarios
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS blogs (
@@ -53,7 +103,9 @@ def create_tables(
         );
         """
     )
+    logger.info("Created blogs table")
 
+    # Flag table - for advanced exploitation scenarios
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS flag (
@@ -61,6 +113,7 @@ def create_tables(
         );
         """
     )
+    logger.info("Created flag table")
 
 
 def init_data(
@@ -69,9 +122,24 @@ def init_data(
         | mysql.connector.abstracts.MySQLConnectionAbstract
     ),
 ):
-
+    """
+    Initialize database with sample data for SQLi demonstrations.
+    
+    Populates tables with:
+    - 26 users including one admin account for privilege escalation demos
+    - 50 blog posts for search-based SQLi scenarios
+    - Educational flags for capture-the-flag style learning
+    
+    Educational note: Passwords are randomly generated hex values.
+    In real applications, passwords should be properly hashed.
+    
+    Args:
+        conn: MySQL database connection
+    """
     cursor = conn.cursor()
+    logger.info("Initializing database with sample data...")
 
+    # Educational user data with mixed privileges
     users_data = [
         ("alice", f"{os.urandom(12).hex()}", "user"),
         ("bob", f"{os.urandom(12).hex()}", "user"),
@@ -84,7 +152,7 @@ def init_data(
         ("ivan", f"{os.urandom(12).hex()}", "user"),
         ("julia", f"{os.urandom(12).hex()}", "user"),
         ("kevin", f"{os.urandom(12).hex()}", "user"),
-        ("admin", f"{os.urandom(12).hex()}", "admin"),
+        ("admin", f"{os.urandom(12).hex()}", "admin"),  # Target for privilege escalation
         ("linda", f"{os.urandom(12).hex()}", "user"),
         ("martin", f"{os.urandom(12).hex()}", "user"),
         ("nancy", f"{os.urandom(12).hex()}", "user"),
@@ -101,6 +169,7 @@ def init_data(
         ("zack", f"{os.urandom(12).hex()}", "user"),
     ]
 
+    # Insert users with parameterized queries (showing secure practice in data setup)
     for username, password, role in users_data:
         cursor.execute(
             """
@@ -109,8 +178,10 @@ def init_data(
             """,
             (username, password, role),
         )
+    
+    logger.info(f"Inserted {len(users_data)} users (including 1 admin)")
 
-    # Insert blogs with author_name matching usernames
+    # Educational blog data for search-based SQLi demonstrations
     blogs_data = [
         ("Basic Python Programming", "alice"),
         ("Introduction to Docker", "bob"),
@@ -164,6 +235,7 @@ def init_data(
         ("DevSecOps: Security in CI/CD Pipeline", "zack"),
     ]
 
+    # Insert blog data using parameterized queries
     for title, author_name in blogs_data:
         cursor.execute(
             """
@@ -171,7 +243,10 @@ def init_data(
             """,
             (title, author_name),
         )
+    
+    logger.info(f"Inserted {len(blogs_data)} blog posts")
 
+    # Insert educational flag for advanced scenarios
     cursor.execute(
         """
         INSERT INTO flag (flag) VALUES
@@ -179,12 +254,34 @@ def init_data(
         """,
         (FLAG_2,),
     )
+    logger.info("Inserted educational flag")
 
 
 def main():
-    conn = get_db_connection()
-    create_tables(conn)
-    init_data(conn)
-    conn.commit()
-    conn.close()
-    print("Database initialized successfully!")
+    """
+    Main initialization function for the SQLi lab database.
+    
+    Sets up the complete database environment with tables and sample data.
+    This function should be called once during application startup.
+    
+    Educational note: This creates a completely fresh database each time,
+    which is suitable for a lab environment but not for production use.
+    """
+    logger.info("Starting database initialization...")
+    
+    try:
+        conn = get_db_connection()
+        create_tables(conn)
+        init_data(conn)
+        conn.commit()
+        conn.close()
+        logger.info("Database initialized successfully!")
+        print("Database initialized successfully!")
+    except mysql.connector.Error as e:
+        logger.error(f"Database initialization failed: {e}")
+        print(f"Database initialization failed: {e}")
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error during database initialization: {e}")
+        print(f"Unexpected error during database initialization: {e}")
+        raise
