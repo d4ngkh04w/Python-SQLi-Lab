@@ -12,9 +12,9 @@ cd Python-SQLi-Lab
 2. **Build and start the container:**
 
 ```bash
-docker build -t python-sqli-lab .
+docker build -t sqli_lab .
 
-docker run -d -p 1303:1303 --name sqli-lab python-sqli-lab
+docker run -p 1303:1303 --name sqli_lab sqli_lab
 ```
 
 3. **Access the application:**

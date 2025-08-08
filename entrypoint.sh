@@ -15,11 +15,17 @@ until mysqladmin ping -h 127.0.0.1 --silent; do
 done
 
 echo "[INFO] Setting up MySQL user and database..."
-mysql -u root <<-EOSQL
-    CREATE DATABASE IF NOT EXISTS sqli_lab;
-    ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
-    FLUSH PRIVILEGES;
+if mysql -u root -e "SELECT 1;" >/dev/null 2>&1; then
+    mysql -u root <<-EOSQL
+        CREATE DATABASE IF NOT EXISTS sqli_lab;
+        ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+        FLUSH PRIVILEGES;
 EOSQL
+else
+    mysql -u root -proot <<-EOSQL
+        CREATE DATABASE IF NOT EXISTS sqli_lab;
+EOSQL
+fi
 
 echo "[INFO] Starting Python app..."
-exec /app/venv/bin/python3 app.py
+exec python3 app.py
